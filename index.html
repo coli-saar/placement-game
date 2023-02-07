@@ -10,12 +10,7 @@
         type: Phaser.AUTO,
         width: 800,
         height: 600,
-        physics: {
-            default: 'arcade',
-            arcade: {
-                gravity: { y: 200 }
-            }
-        },
+        backgroundColor: '#eeeeee',
         scene: {
             preload: preload,
             create: create
@@ -26,32 +21,55 @@
 
     function preload ()
     {
-        this.load.setBaseURL('http://labs.phaser.io');
+        this.load.setBaseURL('http://localhost:8080');
+        // this.load.setCORS('anonymous');
 
-        this.load.image('sky', 'assets/skies/space3.png');
-        this.load.image('logo', 'assets/sprites/phaser3-logo.png');
-        this.load.image('red', 'assets/particles/red.png');
+        this.load.image('cup', 'images/cup.png');
+        this.load.image('knife', 'images/knife.png');
+        this.load.image('tomato', 'images/tomato.png');
+        this.load.image('stove', 'images/stove.png');
+        this.load.image('kitchen-table', 'images/kitchen-table.png');
+    }
+
+    function makeObject(self, width, height, id, scale) {
+        var x = rand(width);
+        var y = rand(height);
+        var ret = self.add.image(x, y, id).setScale(scale);
+
+        ret.on('pointerover', function () {
+            ret.setTint(0xdddddd);
+        });
+
+        ret.on('pointerout', function () {
+            ret.clearTint();
+        });
+
+        ret.setInteractive();
+        self.input.setDraggable(ret);
+
+        return ret;
+    }
+
+    function rand(maxValue) {
+        return Math.floor(maxValue * (Math.random() * 0.8 + 0.1));
     }
 
     function create ()
     {
-        this.add.image(400, 300, 'sky');
+        // static objects
+        var stove = this.add.image(150, 150, 'stove').setScale(0.1);
+        var table = this.add.image(400, 300, 'kitchen-table').setScale(0.1);
 
-        var particles = this.add.particles('red');
+        // movable objects
+        let { width, height } = this.sys.game.canvas;
+        var tomato = makeObject(this, width, height, 'tomato', 0.1);
+        var knife = makeObject(this, width, height, 'knife', 0.2);
+        var cup = makeObject(this, width, height, 'cup', 0.2);
 
-        var emitter = particles.createEmitter({
-            speed: 100,
-            scale: { start: 1, end: 0 },
-            blendMode: 'ADD'
+        this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
+            gameObject.x = dragX;
+            gameObject.y = dragY;
         });
-
-        var logo = this.physics.add.image(400, 100, 'logo');
-
-        logo.setVelocity(100, 200);
-        logo.setBounce(1, 1);
-        logo.setCollideWorldBounds(true);
-
-        emitter.startFollow(logo);
     }
     </script>
 
