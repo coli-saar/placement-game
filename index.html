@@ -8,34 +8,51 @@
     <script>
     var config = {
         type: Phaser.AUTO,
-        width: 800,
-        height: 600,
-        backgroundColor: '#eeeeee',
+        width: 1240,
+        height: 816,
+        backgroundColor: '#f1b77c',
         scene: {
             preload: preload,
             create: create
+        },
+        physics: {
+            default: 'arcade',
+            arcade: {
+                debug: false
         }
+    }
     };
 
     var game = new Phaser.Game(config);
+    var movableObjects = [];
 
+    // loading images
     function preload ()
     {
-        this.load.setBaseURL('http://localhost:8080');
+        this.load.setBaseURL('http://localhost:5500');
         // this.load.setCORS('anonymous');
 
         this.load.image('cup', 'images/cup.png');
         this.load.image('knife', 'images/knife.png');
+        this.load.image('pan', 'images/pan.png');
+        this.load.image('tp', 'images/tp.png');
         this.load.image('tomato', 'images/tomato.png');
         this.load.image('stove', 'images/stove.png');
         this.load.image('kitchen-table', 'images/kitchen-table.png');
+        this.load.image('static-fridge', 'images/static-fridge.png');
+        this.load.image('static-counter', 'images/static-counter.png');
+        this.load.image('static-stove', 'images/static-stove.png');
+        this.load.image('static-floor', 'images/static-floor.png');
+        this.load.image('static-toaster', 'images/static-toaster.png');
     }
 
+    // TODO: make sure the objects aren't overlapping in initial placement
     function makeObject(self, width, height, id, scale) {
         var x = rand(width);
         var y = rand(height);
         var ret = self.add.image(x, y, id).setScale(scale);
 
+        // applies a tint to the object hovered over
         ret.on('pointerover', function () {
             ret.setTint(0xdddddd);
         });
@@ -44,8 +61,10 @@
             ret.clearTint();
         });
 
+        
         ret.setInteractive();
         self.input.setDraggable(ret);
+        movableObjects.push(ret);
 
         return ret;
     }
@@ -56,20 +75,91 @@
 
     function create ()
     {
+        var numPreloadedObjects = Object.keys(this.textures.list).length;
+        var movableObjectsGroup = this.physics.add.group();
+
         // static objects
-        var stove = this.add.image(150, 150, 'stove').setScale(0.1);
-        var table = this.add.image(400, 300, 'kitchen-table').setScale(0.1);
+        var fridge = this.add.image(300, 450, 'static-fridge').setScale(0.5);
+        var counter = this.add.image(850, 430, 'static-counter').setScale(0.6);
+        var staticstove = this.add.image(1010, 482, 'static-stove').setScale(0.62);
+        var floor = this.add.image(570, 357, 'static-floor').setScale(1.2);
+        var toaster = this.add.image(1113, 449, 'static-toaster').setScale(0.33);
+
+        // number of static objects: hardcoded (TO BE CHANGED IF NEED BE)
+        var numStaticObjects = 5;
 
         // movable objects
+        var numObjects = numPreloadedObjects - numStaticObjects;
         let { width, height } = this.sys.game.canvas;
-        var tomato = makeObject(this, width, height, 'tomato', 0.1);
-        var knife = makeObject(this, width, height, 'knife', 0.2);
-        var cup = makeObject(this, width, height, 'cup', 0.2);
 
+        var knife = makeObject(this, width, height, 'knife', 0.20, numObjects);
+        var pan = makeObject(this, width, height, 'pan', 0.3, numObjects);
+        var tp = makeObject(this, width, height, 'tp', 0.3, numObjects);
+
+        movableObjectsGroup.add(knife);
+        movableObjectsGroup.add(pan);
+        movableObjectsGroup.add(tp);
+
+        // Enable physics and set collisions
+        this.physics.world.enable(movableObjectsGroup);
+        this.physics.add.collider(movableObjectsGroup);
+
+        // dragging event
         this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
             gameObject.x = dragX;
             gameObject.y = dragY;
         });
+
+        this.input.on('dragstart', function (pointer, gameObject) {
+            // the gripped object is brought to the front
+            bringToFront(gameObject);
+
+            // saving the starting position in case the object gets placed on top of another and needs to snap back
+            gameObject.setData('previousX', gameObject.x); 
+            gameObject.setData('previousY', gameObject.y);
+        });
+
+
+        this.input.on('dragend', function (pointer, gameObject) {
+            var overlappingObject = movableObjects.find((object) => {
+            return object !== gameObject && isOverlapExceedingThreshold(gameObject, object, 0.1);
+            });
+
+            // if the object is exceeding the overlapping threshold, return it to the previous position
+            if (overlappingObject) {
+                gameObject.x = gameObject.getData('previousX');
+                gameObject.y = gameObject.getData('previousY');
+            }
+        });
+
+
+        // a function that brings the currently held object into the foreground and all the others to the background
+        function bringToFront(gameObject) {
+            gameObject.depth = 1;
+
+            movableObjects.forEach((object) => {
+                if (object !== gameObject) {
+                    object.depth = 0;
+                }
+            });
+        }
+
+        // a function that determines whether the most recently moved object (A) is placed on top of another object (B) by checking if the area of A covering B exceeds a threshold
+        // returns: bool 
+        function isOverlapExceedingThreshold(object1, object2, threshold) {
+            var bounds1 = object1.getBounds();
+            var bounds2 = object2.getBounds();
+
+            var intersectionWidth = Math.min(bounds1.right, bounds2.right) - Math.max(bounds1.x, bounds2.x);
+            var intersectionHeight = Math.min(bounds1.bottom, bounds2.bottom) - Math.max(bounds1.y, bounds2.y);
+
+            var overlapArea = Math.max(0, intersectionWidth) * Math.max(0, intersectionHeight);
+            var object1Area = bounds1.width * bounds1.height;
+
+            return overlapArea / object1Area >= threshold;
+    }
+
+        
     }
     </script>
 
