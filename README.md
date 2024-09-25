@@ -28,12 +28,12 @@ Collaboration is an integral part of human dialogue. Typical task-oriented dialo
         └── code
             └── placement 
                 └── [scripts for deploying the game]
-            ├── instructions.md
+            ├── README.md
             └── requirements.txt
         └── data
             └── data
                 └── [raw .jsonl files]
-            ├── data.md
+            ├── README.md
             └── strategy_breakdown.json
         └── images
             └── [front-end .png elements]
