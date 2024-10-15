@@ -8,7 +8,7 @@ This is the repository containing the crowdsourced data of pairs playing the 2D 
 
 #### IMPORTANT!
 
-**The raw jsonl files can be found in the [```/data```](https://github.com/coli-saar/placement-game/tree/main/data) subdirectory, while the code and deployment instructions can be found in the [```/code```](https://github.com/coli-saar/placement-game/tree/main/code) subdirectory.**  The ```/images``` subdirectory contains the front-end elements loaded into the game.
+**The raw jsonl files can be found in the [```/crowdsourced_data```](https://github.com/coli-saar/placement-game/tree/main/crowdsourced_data) subdirectory, while the code and deployment instructions can be found in the [```/code```](https://github.com/coli-saar/placement-game/tree/main/code) subdirectory.**  The ```/images``` subdirectory contains the front-end elements loaded into the game.
 
 ## Table of contnets:
 
@@ -30,7 +30,7 @@ Collaboration is an integral part of human dialogue. Typical task-oriented dialo
                 └── [scripts for deploying the game]
             ├── README.md
             └── requirements.txt
-        └── data
+        └── crowdsourced_data
             └── data
                 └── [raw .jsonl files]
             ├── README.md

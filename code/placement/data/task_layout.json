@@ -1,0 +1,93 @@
+{
+  "title": "Room",
+  "html": [
+    {
+      "layout-type": "div",
+      "id": "typing",
+      "style": "margin: 5px 10px; min-height: 20px",
+      "layout-content": [
+        {
+          "layout-type": "div",
+          "style": "padding: 10px; display: flex",
+          "layout-content": [
+            {
+              "layout-type": "button",
+              "class": "button",
+              "role": "button",
+              "layout-content": "submit",
+              "id": "submit_button",
+              "style": "padding: 10px; margin: 5px; width: 100%"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "layout-type": "div",
+      "class": "card",
+      "layout-content": [
+        {
+          "layout-type": "div",
+          "layout-content": [
+            {
+              "layout-type": "b",
+              "layout-content": [
+                {
+                  "layout-type": "lighter",
+                  "id": "instr_title",
+                  "style": "min-height: 20px"
+                }
+              ]
+            }
+          ],
+          "style": "color: #abb2b9;"
+        },
+        {
+          "layout-type": "hr",
+          "layout-content": "",
+          "style": "margin: 2px; background-color: #abb2b9; opacity: .50;"
+        },
+        {
+          "layout-type": "div",
+          "id": "instr",
+          "style": "white-space: pre-wrap;"
+        },
+        {
+          "layout-type": "div",
+          "id": "tracking-area",
+          "style": "width: 1024px; height: 768px; margin: auto; text-align: center"
+        }
+      ]
+    }
+  ],
+  "css": {
+    ".button": {
+      "text-transform": "uppercase",
+      "font-size": "medium",
+      "border-radius": "5px",
+      "border": "none",
+      "box-shadow": "rgba(0,0,0,0.14902) 0 1px 1px 0,rgba(0,0,0,0.09804) 0 1px 2px 0",
+      "outline": 0,
+      "background": "#00305E",
+      "width": "100%",
+      "color": "#FFFFFF",
+      "padding": "15px",
+      "cursor": "pointer"
+    },
+    ".button:hover": {
+      "content": "''",
+      "background": "#818BAC"
+    }
+  },
+  "scripts": {
+    "incoming-text": "markdown",
+    "incoming-image": "display-image",
+    "submit-message": "send-message",
+    "print-history": "markdown-history",
+    "plain": [
+      "https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js",
+      "placement"
+    ]
+  },
+  "show_latency": false
+}

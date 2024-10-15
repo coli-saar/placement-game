@@ -13,12 +13,12 @@ This directory contains the necessary code used for running the game via a Slurk
 1. Clone this repository
 2. Install the requirements from ```requirements.txt```
 3. Spin up a Slurk server (follow instructions [here](https://clp-research.github.io/slurk/slurk_gettingstarted.html)) (**IMPORTANT!** Make sure to save the room key that gets generated!)
-4. Cone the  the Slurk bots repositor ([source](https://github.com/clp-research/slurk-bots))
+4. Clone the  the Slurk-bots repositor ([source](https://github.com/clp-research/slurk-bots))
 
 
 ### Steps:
 
-5. Place the ```./placement``` directory in the root of the ```slurk-bots``` directory
+5. Place the ```/placement-game/code/placement/``` directory in the root of the ```slurk-bots``` directory
 6. Run the ```start_bot.py``` (instructions can be found [here](https://github.com/clp-research/slurk-bots/blob/master/README.md)) script in the following way:
 
 - for human-human play (generates two rooms for human players): 
@@ -45,4 +45,8 @@ In the development stage, use the -dev flag.
 
 ### Retrieving data:
 
+<<<<<<< HEAD
 The data will be stored in the database you set up. If you're developing locally, it will be stored at rapidoc - use your room key / ADMIN TOKEN? in order to access it.
+=======
+The data will be stored in the database you set up. If you're developing locally, it will be stored at rapidoc - use your room key in order to access it.
+>>>>>>> 1b930bc (fixed repo structure, added /ROOT/code/placement/data/ including task_layout.json, user_permissions.json, and bot_permissions.json)
